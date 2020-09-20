@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".ui.scenes.currency.CurrencyFragment">
+
+
+
+    <TextView
+        android:id="@+id/tvCharCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:textSize="20sp"
+        tools:text="USD" />
+
+
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        tools:text="Доллар США" />
+
+    <TextView
+        android:id="@+id/tvValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Текущий курс [NOMINAL] [VALUTE] = [VALUE] RUB"  />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="16dp"
+        android:textSize="16sp"
+        android:text="@string/text_convert_to_rub" />
+
+    <EditText
+        android:id="@+id/etSumRub"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/sum_in_rub"
+        android:digits="0123456789."
+        android:inputType="numberDecimal" />
+
+    <TextView
+        android:id="@+id/tvSum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16dp"
+        android:fontFamily="sans-serif-black"
+        tools:text="[COUNT] RUB = [SUM] [VALUTE]" />
+</LinearLayout>

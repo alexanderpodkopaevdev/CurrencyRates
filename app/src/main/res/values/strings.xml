@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Курсы валют</string>
+    <string name="text_about">Приложение разработано Александром Подкопаевым для тестового задания ЦФТ</string>
+    <string name="text_converting">Конвертировать</string>
+    <string name="about">About</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="text_convert_to_rub">Перевод в рубли</string>
+    <string name="sum_in_rub">Введите сумму в рублях</string>
+    <string name="currency_rate">%1$s %2$s = %3$s RUB</string>
+    <string name="total_sum">%1$s %2$s</string>
+
+</resources>
