@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -42,22 +43,32 @@ class CurrenciesListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener,
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         recyclerViewCurrencies.adapter = viewAdapter
         setupData()
+        setupError()
         setupLoading()
-
         currenciesViewModel.fetchCurrencies(loadLocalData())
         swipe_container.setOnRefreshListener(this)
 
     }
 
+    private fun setupError() {
+        currenciesViewModel.isError.observe(viewLifecycleOwner, {
+            if (it == true) Toast.makeText(
+                context,
+                "Проверьте подключение интернета",
+                Toast.LENGTH_LONG
+            ).show();
+        })
+    }
+
     private fun setupLoading() {
-        currenciesViewModel.isLoading.observe(viewLifecycleOwner,  {
+        currenciesViewModel.isLoading.observe(viewLifecycleOwner, {
             recyclerViewCurrencies.visibility = if (it) View.GONE else View.VISIBLE
             swipe_container.isRefreshing = it
         })
     }
 
     private fun setupData() {
-        currenciesViewModel.currencies.observe(viewLifecycleOwner,  {
+        currenciesViewModel.currencies.observe(viewLifecycleOwner, {
             spref?.edit()?.putString(CURRENCIES, Json.encodeToString(it))?.apply()
             viewAdapter.setData(it)
         })
