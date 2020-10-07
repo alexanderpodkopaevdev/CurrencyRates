@@ -8,13 +8,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.alexanderpodkopaev.currencyrates.R
 import com.alexanderpodkopaev.currencyrates.ui.scenes.currencies.adapter.CurrenciesAdapter
 import com.alexanderpodkopaev.currencyrates.ui.scenes.currencies.adapter.CurrencyCellModel
 import com.alexanderpodkopaev.currencyrates.ui.scenes.currency.CurrencyFragment
+import com.alexanderpodkopaev.currencyrates.ui.scenes.currency.CurrencyViewModel
 import kotlinx.android.synthetic.main.fragment_currencies_list.*
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -22,7 +24,8 @@ import kotlinx.serialization.json.Json
 class CurrenciesListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener,
     CurrenciesAdapter.MyOnClickListener {
 
-    private lateinit var currenciesViewModel: CurrenciesViewModel
+    private val currenciesViewModel: CurrenciesViewModel by viewModels()
+    private val currencyViewModel: CurrencyViewModel by activityViewModels()
     private val viewAdapter = CurrenciesAdapter(this)
     private var spref: SharedPreferences? = null
 
@@ -30,7 +33,6 @@ class CurrenciesListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener,
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        currenciesViewModel = ViewModelProvider(this).get(CurrenciesViewModel::class.java)
         return inflater.inflate(R.layout.fragment_currencies_list, container, false)
     }
 
@@ -84,19 +86,15 @@ class CurrenciesListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener,
     }
 
     override fun onClick(currency: CurrencyCellModel) {
-        val fragment: Fragment = CurrencyFragment()
-        val args = Bundle()
-        args.putString(CURRENCY, Json.encodeToString(currency))
-        fragment.arguments = args
+        currencyViewModel.fetchData(currency)
         parentFragmentManager
             .beginTransaction()
-            .replace(R.id.container, fragment, null)
+            .replace(R.id.container, CurrencyFragment(), null)
             .addToBackStack(null)
             .commit()
     }
 
     companion object {
-        const val CURRENCY: String = "currency"
         const val CURRENCIES: String = "currencies"
 
     }

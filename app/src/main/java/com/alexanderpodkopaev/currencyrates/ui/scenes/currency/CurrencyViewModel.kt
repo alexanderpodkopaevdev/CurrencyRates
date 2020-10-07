@@ -11,7 +11,7 @@ class CurrencyViewModel : ViewModel() {
     private val _name: MutableLiveData<String> = MutableLiveData<String>().apply { value = "" }
     private val _nominal: MutableLiveData<Int> = MutableLiveData<Int>().apply { value = 0 }
     private val _value: MutableLiveData<Double> = MutableLiveData<Double>().apply { value = 0.0 }
-    private val _countRub: MutableLiveData<Double> = MutableLiveData<Double>().apply { {value = 0.0} }
+    private val _countRub: MutableLiveData<Double> = MutableLiveData<Double>().apply { value = 0.0 }
 
 
     val charCode: LiveData<String> = _charCode

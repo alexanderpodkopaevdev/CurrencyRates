@@ -7,17 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import com.alexanderpodkopaev.currencyrates.R
-import com.alexanderpodkopaev.currencyrates.ui.scenes.currencies.CurrenciesListFragment
-import com.alexanderpodkopaev.currencyrates.ui.scenes.currencies.adapter.CurrencyCellModel
 import kotlinx.android.synthetic.main.currency_fragment.*
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.Json
 
 class CurrencyFragment : Fragment() {
 
-    private lateinit var viewModel: CurrencyViewModel
+    private val viewModel: CurrencyViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,29 +24,18 @@ class CurrencyFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(CurrencyViewModel::class.java)
-        val currencyCellModel = Json.decodeFromString<CurrencyCellModel>(
-            arguments?.getString(CurrenciesListFragment.CURRENCY) ?: ""
-        )
-
         configureLayout()
 
+        etSumRub.setText(viewModel.countRub.value.toString())
         etSumRub.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
             }
-
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
             }
-
             override fun afterTextChanged(s: Editable?) {
                 if (!s.isNullOrEmpty()) viewModel.count(s.toString().toDouble())
-
             }
         })
-
-        viewModel.fetchData(currencyCellModel)
     }
 
     private fun configureLayout() {
