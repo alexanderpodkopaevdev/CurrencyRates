@@ -5,19 +5,17 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.alexanderpodkopaev.currencyrates.domain.models.CurrencyModel
 import com.alexanderpodkopaev.currencyrates.domain.repository.CurrenciesRepositoryImpl
 import com.alexanderpodkopaev.currencyrates.ui.scenes.currencies.adapter.CurrencyCellModel
 import com.alexanderpodkopaev.currencyrates.ui.scenes.currencies.adapter.mapToUi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.Json
 
 class CurrenciesViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -38,29 +36,31 @@ class CurrenciesViewModel(application: Application) : AndroidViewModel(applicati
     val isLoading: LiveData<Boolean> = _isLoading
     val isError: LiveData<Boolean> = _isError
 
-    fun fetchCurrencies(localData: String) {
+    fun fetchCurrencies(needOnline: Boolean) {
         viewModelScope.launch {
             _isLoading.postValue(true)
             withContext(Dispatchers.IO) {
-                if (localData.isEmpty()) {
+                var currencies: List<CurrencyModel> = listOf()
+                if (needOnline) {
                     if (isOnline()) {
                         _isError.postValue(false)
-                        Log.d("TAG", "From server")
-                        val currencies = currenciesRepository.fetchCurrencies()
-                        _currencies.postValue(currencies.map {
-                            it.mapToUi()
-                        })
+                        currencies = currenciesRepository.fetchCurrencies(
+                            getApplication<Application>().applicationContext,
+                            needOnline
+                        )
                     } else {
                         _isError.postValue(true)
                     }
                 } else {
-                    Log.d("TAG", "From pref")
-
-                    _currencies.postValue(Json.decodeFromString<List<CurrencyCellModel>>(localData))
+                    currencies = currenciesRepository.fetchCurrencies(
+                        getApplication<Application>().applicationContext,
+                        needOnline
+                    )
                 }
+                _currencies.postValue(currencies.map {
+                    it.mapToUi()
+                })
                 _isLoading.postValue(false)
-
-
             }
         }
     }

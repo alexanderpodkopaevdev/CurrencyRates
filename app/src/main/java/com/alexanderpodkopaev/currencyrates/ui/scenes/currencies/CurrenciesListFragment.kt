@@ -47,7 +47,7 @@ class CurrenciesListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener,
         setupData()
         setupError()
         setupLoading()
-        currenciesViewModel.fetchCurrencies(loadLocalData())
+        currenciesViewModel.fetchCurrencies(false)
         swipe_container.setOnRefreshListener(this)
 
     }
@@ -77,12 +77,7 @@ class CurrenciesListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener,
     }
 
     override fun onRefresh() {
-        currenciesViewModel.fetchCurrencies("")
-    }
-
-    private fun loadLocalData(): String {
-        return spref?.getString(CURRENCIES, "") ?: ""
-
+        currenciesViewModel.fetchCurrencies(true)
     }
 
     override fun onClick(currency: CurrencyCellModel) {

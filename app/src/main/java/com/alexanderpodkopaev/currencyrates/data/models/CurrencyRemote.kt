@@ -1,11 +1,14 @@
 package com.alexanderpodkopaev.currencyrates.data.models
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-
+@Entity
 @Serializable
 data class CurrencyRemote(
+    @PrimaryKey
     @SerialName("CharCode")
     val charCode: String,
     @SerialName("ID")
